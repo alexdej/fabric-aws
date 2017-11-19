@@ -140,6 +140,8 @@ def autoscaling_group_generator(region, autoscaling_group_name, hostname_attribu
     """
 
     instance_ids = autoscaling_group_instance_ids(region, autoscaling_group_name)
+    if not instance_ids:
+        return
 
     hosts = ec2_generator(region,
                           hostname_attribute=hostname_attribute,
