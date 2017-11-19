@@ -84,14 +84,25 @@ class TestDecorators(unittest.TestCase):
         with mock.patch('boto.ec2', mock_ec2), mock.patch('boto.cloudformation', mock_cloudformation):
             @autoscaling_group('region', 'autoscaling-group-name')
             @task
-            def dummy():
+            def dummy1():
                 pass
 
-            hosts = list(dummy.hosts)
+            @autoscaling_group('region', ['autoscaling-group-name'])
+            @task
+            def dummy2():
+                pass
+
+            hosts1 = list(dummy1.hosts)
+            hosts2 = list(dummy2.hosts)
 
         self.assertListEqual(
             ['a.a.a', 'b.b.b', 'c.c.c', 'd.d.d'],
-            hosts
+            hosts1
+        )
+
+        self.assertListEqual(
+            ['a.a.a', 'b.b.b', 'c.c.c', 'd.d.d'],
+            hosts2
         )
 
     def test_ec2(self):

@@ -32,10 +32,11 @@ import mock
 
 def mock_environment():
     mock_autoscale_connection = mock.MagicMock(**{
-        'get_all_groups.return_value': [mock.MagicMock(instances=[mock.Mock(instance_id='i-00000001'),
-                                                                  mock.Mock(instance_id='i-00000002'),
-                                                                  mock.Mock(instance_id='i-00000003'),
-                                                                  mock.Mock(instance_id='i-00000004')])]
+        'get_all_groups.return_value': [
+            mock.MagicMock(instances=[mock.Mock(instance_id='i-00000001'),
+                                      mock.Mock(instance_id='i-00000002'),
+                                      mock.Mock(instance_id='i-00000003')]),
+            mock.MagicMock(instances=[mock.Mock(instance_id='i-00000004')])]
     })
     mock_autoscale = mock.MagicMock(**{'connect_to_region.return_value': mock_autoscale_connection})
 

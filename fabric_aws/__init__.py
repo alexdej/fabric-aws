@@ -90,11 +90,15 @@ def autoscaling_group_instance_ids(region, autoscaling_group_name):
     :return: list of instance ids inside `autoscaling_group_name`
     :rtype: list[str]
     """
+    if hasattr(autoscaling_group_name, '__iter__'):
+        autoscaling_group_names = list(autoscaling_group_name)
+    else:
+        autoscaling_group_names = [autoscaling_group_name]
 
     autoscale_connection = boto.ec2.autoscale.connect_to_region(region)
-    asg = autoscale_connection.get_all_groups(names=[autoscaling_group_name])[0]
+    groups = autoscale_connection.get_all_groups(names=autoscaling_group_names)
 
-    return [instance.instance_id for instance in asg.instances]
+    return [instance.instance_id for asg in groups for instance in asg.instances]
 
 
 def cloudformation_autoscaling_group_generator(region, cfn_stack_name, asg_resource_name,
